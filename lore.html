@@ -1,0 +1,584 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Лор мира | Аркем — старая книга</title>
+  <!-- Шрифты с историческим/винтажным характером -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* --- стили, идентичные странице правил --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #2b2118;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      font-family: 'EB Garamond', 'Georgia', 'Times New Roman', serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" opacity="0.2"><path fill="none" d="M0 0h400v300H0z"/><path fill="%23806040" d="M10 10 L20 5 L30 12 L40 7 L50 13 L60 9 L70 15 L80 11 L90 17 L100 12 L110 18 L120 14 L130 19 L140 15 L150 20 L160 16 L170 21 L180 17 L190 22 L200 18 L210 23 L220 19 L230 24 L240 20 L250 25 L260 21 L270 26 L280 22 L290 27 L300 23 L310 28 L320 24 L330 29 L340 25 L350 30 L360 26 L370 31 L380 27 L390 32 L400 28" stroke="%23806040" stroke-width="0.6" fill="none"/><circle cx="45" cy="85" r="2" fill="%23806040"/><circle cx="120" cy="140" r="1.5" fill="%23806040"/><circle cx="290" cy="210" r="2" fill="%23806040"/><path d="M70 250 L80 248 L90 252 L100 249 L110 253" stroke="%23806040" stroke-width="0.8" fill="none"/></svg>');
+      background-repeat: repeat;
+      background-size: 200px;
+      pointer-events: none;
+      opacity: 0.15;
+      z-index: 0;
+    }
+
+    .book {
+      max-width: 1200px;
+      width: 100%;
+      background: #fdf8e7;
+      background-image: radial-gradient(circle at 25% 40%, rgba(180, 130, 80, 0.08) 1.5%, transparent 1.5%),
+                        radial-gradient(circle at 70% 85%, rgba(140, 90, 40, 0.08) 2%, transparent 2%);
+      background-size: 32px 32px, 48px 48px;
+      border-radius: 12px 24px 24px 12px;
+      box-shadow: 0 30px 45px -20px rgba(0,0,0,0.6), 0 0 0 1px #c9b27c, 0 0 0 8px #3e2a1f, 0 0 0 12px #5c3f28;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 2rem;
+    }
+
+    .book::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 28px;
+      height: 100%;
+      background: repeating-linear-gradient(90deg, #8b5a2b, #6b3e1a 3px, #a5723e 5px, #7b4a23 8px);
+      border-radius: 8px 0 0 8px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+      z-index: 3;
+    }
+
+    .book::after {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 4px;
+      width: 20px;
+      height: calc(100% - 30px);
+      border-left: 1px solid rgba(255,215,130,0.5);
+      border-right: 1px solid rgba(255,215,130,0.3);
+      pointer-events: none;
+    }
+
+    .page {
+      padding: 2.2rem 2.8rem 2.8rem 3.2rem;
+      position: relative;
+      background: rgba(253, 248, 231, 0.95);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .page .corner {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #c9aa6b;
+      pointer-events: none;
+    }
+    .corner-tl { top: 20px; left: 20px; border-top: 2px solid #c9aa6b; border-left: 2px solid #c9aa6b; border-right: none; border-bottom: none; }
+    .corner-tr { top: 20px; right: 20px; border-top: 2px solid #c9aa6b; border-right: 2px solid #c9aa6b; border-left: none; border-bottom: none; }
+    .corner-bl { bottom: 20px; left: 20px; border-bottom: 2px solid #c9aa6b; border-left: 2px solid #c9aa6b; border-top: none; border-right: none; }
+    .corner-br { bottom: 20px; right: 20px; border-bottom: 2px solid #c9aa6b; border-right: 2px solid #c9aa6b; border-top: none; border-left: none; }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      background: rgba(45, 35, 25, 0.7);
+      backdrop-filter: blur(4px);
+      padding: 0.6rem 1rem;
+      border-radius: 48px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .nav-links a {
+      color: #f3e5c0;
+      font-family: 'Cinzel', serif;
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      transition: 0.2s;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+    }
+    .nav-links a:hover {
+      color: #ffecb3;
+      background: rgba(100, 70, 40, 0.5);
+    }
+    .nav-links a.active {
+      background: #8b6946;
+      color: #fef0cf;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #c2a156;
+      display: inline-block;
+      width: auto;
+      padding-bottom: 0.3rem;
+      letter-spacing: 2px;
+    }
+    h1 {
+      font-family: 'Cinzel', 'Times New Roman', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #4d2f14;
+      text-shadow: 1px 1px 0 #e9dbbc;
+    }
+    .subhead {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      color: #8b6946;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    .rule-section {
+      margin-bottom: 1.8rem;
+      border: 1px solid #e2d0ae;
+      border-radius: 12px;
+      background: rgba(250, 245, 235, 0.7);
+      overflow: hidden;
+    }
+    .section-header {
+      background: #e9ddc5;
+      padding: 0.8rem 1.2rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      color: #4d2f14;
+      transition: background 0.2s;
+      border-bottom: 1px solid #d6c29d;
+    }
+    .section-header:hover {
+      background: #e1d0b0;
+    }
+    .section-header i:last-child {
+      transition: transform 0.3s ease;
+    }
+    .section-header.open i:last-child {
+      transform: rotate(180deg);
+    }
+    .section-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+      padding: 0 1.5rem;
+      line-height: 1.5;
+      color: #2f241b;
+      font-size: 1rem;
+    }
+    .section-content.open {
+      max-height: 3000px;
+      padding: 1.2rem 1.5rem;
+    }
+    .section-content p {
+      margin-bottom: 0.8rem;
+    }
+    .section-content ul, .section-content ol {
+      margin-left: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+    .section-content li {
+      margin-bottom: 0.4rem;
+    }
+    .rule-highlight {
+      background: #f7efdb;
+      border-left: 4px solid #b88746;
+      padding: 0.5rem 1rem;
+      margin: 0.8rem 0;
+      font-style: italic;
+    }
+    .example {
+      background: #f2ebdb;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin: 0.8rem 0;
+      border: 1px solid #decb9e;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0;
+      border-radius: 8px;
+    }
+    .lore-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fdf7e8;
+      border: 1px solid #d6c29d;
+      min-width: 300px;
+    }
+    .lore-table th, .lore-table td {
+      border: 1px solid #d6c29d;
+      padding: 0.5rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .lore-table th {
+      background: #e9ddc5;
+      font-family: 'Cinzel', serif;
+    }
+
+    @media (max-width: 800px) {
+      body { padding: 1rem; }
+      .book::before { width: 18px; }
+      .page { padding: 1.5rem 1.2rem 1.8rem 2rem; }
+      h1 { font-size: 1.4rem; }
+      .corner { width: 25px; height: 25px; }
+      .section-header { font-size: 0.9rem; }
+      .section-content { font-size: 0.9rem; }
+      .section-content.open { padding: 1rem; }
+    }
+
+    .book { animation: fadeBook 0.7s ease-out; }
+    @keyframes fadeBook {
+      0% { opacity: 0; transform: translateY(20px) rotateX(-3deg); }
+      100% { opacity: 1; transform: translateY(0) rotateX(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav-links">
+  <a href="index.html"><i class="fas fa-home"></i> Главная</a>
+  <a href="rules.html"><i class="fas fa-dice-d20"></i> Правила</a>
+  <a href="words.html"><i class="fas fa-meteor"></i> Слова Творения</a>
+  <a href="lore.html" class="active"><i class="fas fa-scroll"></i> Лор</a>
+  <a href="bestiary.html"><i class="fas fa-dragon"></i> Бестиарий существ</a>
+  <a href="tools.html"><i class="fas fa-tools"></i> Инструменты мастера</a>
+  <a href="download.html"><i class="fas fa-download"></i> Скачать</a>
+</div>
+
+<div class="book">
+  <div class="page">
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <div style="text-align: center;">
+      <div class="page-title">
+        <h1>📜 Хроники Аркема 📜</h1>
+        <div class="subhead">Лор мира, его история, народы и тайны</div>
+      </div>
+    </div>
+
+    <!-- ========== 1. Введение ========== -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-globe-europe"></i> 1. Географический справочник Аркема</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p><strong>Слава и опасности в проклятых историей землях</strong><br>
+        Мир, который приведён здесь – лишь один из многих, дрейфующих в пустоте Несотворённой Ночи. Для его жителей мир во многом остался таким же, каким был, покрытый шрамами Раскола, но сохраняющий солнечный свет, гравитацию, смену сезонов и все приличествующие миру элементы. И, тем не менее, любая образованная душа знает, что эта успокаивающая прочность рассыпается в прах на дальних границах, где голубое небо превращается в черноту и свет солнца пропадает в сгущающемся мраке.</p>
+        <p>Миры очень хрупки. Каждый из них – фрагмент былого мироздания, и каждый страдает от прогрессирующего упадка небесных механизмов. Яркие схемы неземного великолепия, некогда поддерживавшие законы природы, теперь сломаны, слишком многие из них разрушены божественными охотниками за артефактами, разбиты Сотворёнными Богами в их войне, или развалились без заботы ангелов.</p>
+        <p><strong>В начале</strong><br>Мудрецы и учёные мало в чём уверены относительно старого мира. Они соглашаются в том, что когда-то он был целым, давным-давно созданным далёким Единым, который жил среди ангелов на Небесах. У этих древних было много традиций и обычаев. Одним из чудес была великая тайна теургии. Обладание ею стало всепоглощающей целью для каждого государства. Пока искусство теургии расцветало по всему миру, с его помощью было создано бесчисленное количество замечательных чудес.</p>
+        <p>Однако этого было недостаточно. Народы мира начали ссориться по более утончённым вопросам. Со временем самые могущественные теурги былого мира согласились представить свой спор перед высшим судьёй. Они хотели взять стены Небес штурмом и найти Единого. Они смогли добиться успеха. Ангелы бежали в Ад, а теурги вошли в зал Единого. Там они и нашли пустой трон.</p>
+        <p>Нации земного мира внизу погрузились в хаос. Теурги посчитали, что если на Троне нет Бога, то человечество должно предоставить замену. Они проникли глубоко в небесные залы, вскрывая странные механизмы для создания големов-богов. Повреждения, которые они нанесли, вызвали опустошение в мире внизу. Разные нации создали разные формы <strong>Сотворённых Богов</strong>. Эти существа взяли Небеса штурмом, отталкивая ангелов и воюя друг с другом. Вызванный войнами хаос и осквернение небесных механизмов дали свой эффект. Сияющие залы Небес начали раскалываться, а их осколки – уплывать в Несотворённую Ночь.</p>
+        <p>Внизу эхом урона, причинённого наверху, стал <strong>Раскол</strong>. Мироздание стало раскалываться на куски, и каждый «мир» уплывал в Несотворённую Ночь. Тысячу лет миры боролись за выживание. Но есть в мирах и кое-что новое. Высохшие трупы Сотворённых Богов распадаются. Связанная с божественными големами сила освобождается и падает на миры внизу. Странная алхимия очистила эту силу так, как её создатели и не представляли. Слова Творения, некогда используемые Сотворёнными Богами, теперь наследуются смертными мужчинами и женщинами. Это – <strong>Обожествлённые</strong>.</p>
+      </div>
+    </div>
+
+    <!-- ========== 2. Природа Вселенной ========== -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-star-of-life"></i> 2. Природа Вселенной</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p>Вселенная разделена на четыре великие части: Небеса, миры, Ад и Несотворённая Ночь, которая их окружает. Единственным распространённым способом путешествия между сферами являются Ночные Дороги.</p>
+        <p><strong>Несотворённая Ночь</strong> – это изначальный хаос, из которого всё произошло. Но из её тьмы появляются существа – Несотворённые, искривлённые прото-существа. Единственный способ пересечь Ночь – через Ночные Дороги. Эти узкие пути опасны, кишат Несотворёнными и часто ведут в <strong>Миры-трупы</strong> – разрушенные миры, где можно найти сокровища и ужасы.</p>
+        <p><strong>Небеса</strong> – разрушенный дом. Их осколки плывут в Ночи, соединяемые скрытыми дорогами. Залы Небес величественны, но покрыты трещинами. Небесные механизмы поддерживают миры; если их остановить, мир исчезнет.</p>
+        <p><strong>Ад</strong> – убежище изгнанных ангелов, пылающий пузырь ужасных механизмов, управляемый озлобленными ангелами. Души умерших без погребальных обрядов попадают сюда на вечные муки. Архангел Самаэль, изгнанный с Небес, скрывается в лабиринтах Ада и может стать союзником.</p>
+        <p><strong>Рай</strong> – маленькие миры-убежища, созданные Сотворёнными Богами. Души верующих после смерти попадают туда вместо Ада. Со смертью создателя Раи могут испортиться или стать добычей Несотворённых.</p>
+      </div>
+    </div>
+
+    <!-- ========== 3. Государства Аркема (общее) ========== -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-landmark"></i> 3. Государства Аркема</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p>Уроженцы этого мира чаще всего называют его «Аркем», по старому патрийскому слову, обозначающему убежище. Для большинства местных прошлое – лишь философское сожаление; они слишком заняты выживанием. Однако ситуация в Аркеме меняется, и меняется не к лучшему. Каждый год всё больше чудовищ выбирается из теней, происходят необъяснимые магические бедствия. Небесные механизмы изнашиваются, и если они откажут, Аркем падёт вместе с ними.</p>
+        <p>На карте основного континента расположены пятнадцать основных государств. Путешествия долиго за океа пределы приводят к  тому что грань между Несотворённой Ночи и миром все меньше,пока групаа не упадет в Несотворённую Ночь на корм Несотворённым. Аркем начал сталкиваться с Обожествлёнными только в последние несколько лет. Если игроки решат вмешаться в политику, ни одно государство не устоит перед согласованным вниманием пантеона опытных Обожествлённых.</p>
+        <p>Ниже приведены подробные описания всех государств мира. Каждое из них обладает уникальной историей, культурой и проблемами.</p>
+      </div>
+    </div>
+
+    <!-- Далее – по одному разделу на каждое государство. Список государств по порядку из исходного текста -->
+    <!-- Анкалия -->
+    <div class="rule-section">
+      <div class="section-header"><span>⚔️ Анкалия</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Королевство, рухнувшее после катастрофического вторжения из иного мира</strong><br>Лишь пять лет тому назад Анкалия была маяком мирного процветания. Но девять ужасных Ночных Дорог прорвались по всей стране, орды Несотворённых обрушились на Анкалию, а Опустошающая Чума подняла каждый труп рыщущим остовом. Рыцарские ордены были уничтожены. Выжившие люди отступили в прибрежные анклавы. Соседи не рады беженцам, опасаясь, что беда заразна. Знаменитые рыцари почти вымерли, но некоторые странствующие клинки по-прежнему путешествуют по земле.</p>
+        <p><strong>Население:</strong> неизвестно, ранее около 4 млн.<br>
+        <strong>Правительство:</strong> полевые командиры и выжившие чиновники.<br>
+        <strong>Проблемы:</strong> земли кишат монстрами; иноземные авантюристы грабят руины.<br>
+        <strong>Имена:</strong> мужские: Давит, Яред, Амануэль; женские: Редит, Винта, Самира; фамилии: Тиволде, Сенаи, Зережи.</p>
+      </div>
+    </div>
+    <!-- Атеократия Лома -->
+    <div class="rule-section">
+      <div class="section-header"><span>🕯️ Атеократия Лома</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Земля, отравленная Расколом, которой правят грозные священники Истинного Разума</strong><br>Лом – земля мрачных выживших, беженцев, сбежавших от холодных искусственных богов. Атеократия отвергает всех богов; лишь человеческий разум – мера справедливости. Антижрецы черпают силу из Костра, ангельского артефакта, и могут подавлять магию. Втайне Лом взращивается ангелами, которые желают уничтожить религию во всем мире.</p>
+        <p><strong>Население:</strong> 4 млн, из них 70 тыс. антижрецов.<br>
+        <strong>Проблемы:</strong> антижрецы обращаются с народом как с расходным материалом; Костёр хотят украсть; ангельские покровители готовы пожертвовать государством.</p>
+      </div>
+    </div>
+    <!-- Мрачные Просторы -->
+    <div class="rule-section">
+      <div class="section-header"><span>🌫️ Мрачные Просторы</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Опустошённая страна изгнанников</strong><br>Земля, которую считали проклятой, стала убежищем для изгнанников и мятежников. Города – полуразвалившиеся селения на побережье. В глубине страны скрываются паразитные боги, экспериментаторы и колдуны. Жители прагматичны и осторожны, часто заключают сделки с тёмными силами.</p>
+        <p><strong>Население:</strong> около 250 000 на побережье, неизвестно в глубине.<br>
+        <strong>Проблемы:</strong> постоянное появление паразитных богов; разрушение древних сдерживающих структур; убежище для порочных личностей.</p>
+      </div>
+    </div>
+    <!-- Светлая Республика -->
+    <div class="rule-section">
+      <div class="section-header"><span>⚡ Светлая Республика</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Последний бастион передовой науки</strong><br>Островное государство сохранило сложные технологии благодаря эфирным узлам. Жизнь граждан сравнима с первой мировой современности. Но узлы изнашиваются, и Республика не может их заменить. Правительство – марионетка в руках бюрократов, криминальных групп и корпораций.</p>
+        <p><strong>Население:</strong> 12 млн.<br>
+        <strong>Проблемы:</strong> износ узлов; коррупция; зависть соседей к богатству.</p>
+      </div>
+    </div>
+    <!-- Далёкие Земли -->
+    <div class="rule-section">
+      <div class="section-header"><span>🌌 Далёкие Земли</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Далёкие земли, плывущие в Несотворённой Ночи</strong><br>За пределами Ночи существуют тайные пути. Иногда появляются корабли из потерянных флотов, привозя странные рассказы и даже нелюдей. Далёкие Земли служат вместилищем для персонажей и существ, не имеющих очевидного происхождения в Аркеме. Ведущий может использовать их для импорта других сеттингов или уникальных рас.</p>
+      </div>
+    </div>
+    <!-- Ревуны -->
+    <div class="rule-section">
+      <div class="section-header"><span>🏹 Ревуны</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Племенные рейдеры потерянной империи</strong><br>Кочевые племена, ездящие на странных существах, поклоняющиеся духам земли. Их предки создали Мандалу, мистическое устройство, разрушившее их цивилизацию. Ревуны – превосходные поэты и музыканты, избегают письменности. Славятся как наездники и дрессировщики.</p>
+        <p><strong>Население:</strong> 1 млн.<br>
+        <strong>Проблемы:</strong> вражда с Ломом и Виссио; отравленные земли рождают чудовищ; уязвимость к подчинению.</p>
+      </div>
+    </div>
+    <!-- Касирутанский Архипелаг -->
+    <div class="rule-section">
+      <div class="section-header"><span>⛵ Касирутанский Архипелаг</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Пираты и торговцы жарких островов</strong><br>Лучшие моряки мира, одновременно купцы и пираты. Каждый город номинально независим под властью датука, но реальная власть у пиратских капитанов и купеческих принцев. Острова покрыты джунглями и вулканами, в глубине – древние руины.</p>
+        <p><strong>Население:</strong> 1 млн.<br>
+        <strong>Проблемы:</strong> пираты могут вызвать гнев соседей; мало пригодной земли; гражданские войны между датуками.</p>
+      </div>
+    </div>
+    <!-- Нездохва -->
+    <div class="rule-section">
+      <div class="section-header"><span>⚙️ Нездохва</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Государство крепостных, мастеров и противоборствующих големов-вельмож</strong><br>Железный Царь – конструкт, захвативший власть. Механическая знать обладает собственной волей. Люди-крепостные обслуживают бояр-автоматонов, мастера из Гильдии пользуются относительной свободой.</p>
+        <p><strong>Население:</strong> 60 тыс. автоматонов, 6 млн крепостных.<br>
+        <strong>Проблемы:</strong> ненависть крепостных; нападения чудовищ; прогрессивная фракция бояр.</p>
+      </div>
+    </div>
+    <!-- Государства-Оазисы -->
+    <div class="rule-section">
+      <div class="section-header"><span>🏜️ Государства-Оазисы</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Живущие в пирамидах обитатели пустыни</strong><br>Гигантские пирамиды, внутри которых гидропонные сады. Знать практикует евгенику и родственные браки для развития магических способностей. Песчаные принцы грабят караваны.</p>
+        <p><strong>Население:</strong> 3 млн, 3% – рейдеры.<br>
+        <strong>Проблемы:</strong> агрессивные песчаные принцы; нестабильные отпрыски знати; народ терпит, но не любит властителей.</p>
+      </div>
+    </div>
+    <!-- Патрийская Империя -->
+    <div class="rule-section">
+      <div class="section-header"><span>🏛️ Патрийская Империя</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Военизированное государство, зависящее от тяжёлой пехоты и рабства</strong><br>Легионы лучшей тяжёлой пехоты тысячу лет сдерживают Дулумбаи. Рабы составляют 30% населения. Патрийцы – последователи Церкви Единого, оправдывающей рабство.</p>
+        <p><strong>Население:</strong> 10 млн, 30% рабы.<br>
+        <strong>Проблемы:</strong> вечная война с Дулумбаи; угроза восстания рабов; легионы могут свергнуть правителя.</p>
+      </div>
+    </div>
+    <!-- Рактинская Конфедерация -->
+    <div class="rule-section">
+      <div class="section-header"><span>🌲 Рактинская Конфедерация</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Лоскутное одеяло городов-государств и сельских территорий</strong><br>Сорок лет назад колдуны Чёрных Академий призвали чудовищ, чтобы изгнать захватчиков. Страна до сих пор кишит монстрами. Пожиратели Проклятий – охотники на чудовищ.</p>
+        <p><strong>Население:</strong> 5 млн, не более 5% в городах.<br>
+        <strong>Проблемы:</strong> постоянные междоусобицы знати; Дулумбаи и Патрия ждут своего часа; налёты из Нездохвы.</p>
+      </div>
+    </div>
+    <!-- Дулумбайское Регентство -->
+    <div class="rule-section">
+      <div class="section-header"><span>🎋 Дулумбайское Регентство</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Авангард древнего вторжения, гордящееся эрудицией и искусством</strong><br>Основано как плацдарм вторжения, но Раскол отрезал от метрополии. Иерархическое общество с классом джунзи (учёные-чиновники) и сяоренами (простолюдинами). Великие Экзамены определяют карьеру.</p>
+        <p><strong>Население:</strong> 16 млн, 5% джунзи, 10% рабы.<br>
+        <strong>Проблемы:</strong> неопределённость в отношении Обожествлённых; война с Патрией; назревающее восстание сяоренов.</p>
+      </div>
+    </div>
+    <!-- Тысяча Богов -->
+    <div class="rule-section">
+      <div class="section-header"><span>👁️ Тысяча Богов</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Земля, в которой свирепствуют божества, а племена используют древнюю теотехническую магию</strong><br>Бывшие исследовательские полигоны, где после Раскола создали искусственных богов. Теперь эти божества требуют всё больше жертв. Воины-Безбожники в джунглях владеют техниками убийства богов.</p>
+        <p><strong>Население:</strong> около 1 млн.<br>
+        <strong>Проблемы:</strong> боги становятся всё более деспотичными; лёгкая добыча для работорговцев; Безбожники враждебны ко всем.</p>
+      </div>
+    </div>
+    <!-- Равнины Тоба -->
+    <div class="rule-section">
+      <div class="section-header"><span>🐎 Равнины Тоба</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Гордые всадники, служащие святым монахам монастырей</strong><br>Потомки лёгкой кавалерии дулумбайского флота. Кочевники-скотоводы живут в юртах, а часть населения обитает в ламаистских монастырях, которые являются торговыми центрами. Монастыри постоянно соперничают.</p>
+        <p><strong>Население:</strong> 3 млн, 10% в монастырях.<br>
+        <strong>Проблемы:</strong> борьба монастырей за влияние; междоусобные налёты; магические чудовища из Тысячи Богов.</p>
+      </div>
+    </div>
+    <!-- Ульстангские Рифы -->
+    <div class="rule-section">
+      <div class="section-header"><span>❄️ Ульстангские Рифы</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Ведьмы-викинги, порабощающие мёртвых</strong><br>Королевы-ведьмы правят островами, используя некромантию. Драугры – ходячие мертвецы – выполняют тяжёлую работу. Мужчины отправляются в набеги, женщины могут стать жрицами. Каждый остров управляется своей королевой-ведьмой.</p>
+        <p><strong>Население:</strong> 1 млн живых, 4 млн драугров.<br>
+        <strong>Проблемы:</strong> все соседи ненавидят ульстангцев; одна из ведьм заключила сделку с безымянными существами; хозяйство полностью зависит от драугров.</p>
+      </div>
+    </div>
+    <!-- Виссио -->
+    <div class="rule-section">
+      <div class="section-header"><span>🎨 Виссио</span><i class="fas fa-chevron-down"></i></div>
+      <div class="section-content">
+        <p><strong>Бывшие патрийские колонии, ставшие независимыми городами-государствами купцов, художников, отравителей и поэтов</strong><br>Виссийцы гордятся своей культурой, музыкой, скульптурой. Города укреплены, политика изобилует заговорами и заказными убийствами. Орден Редакторов («Бритвы Бога») – тайные убийцы. Механические протезы виссийских маэстро высоко ценятся.</p>
+        <p><strong>Население:</strong> 6 млн.<br>
+        <strong>Проблемы:</strong> торговые войны между городами; Бритвы берут любой контракт; культурное давление Светлой Республики.</p>
+      </div>
+    </div>
+
+    <!-- ========== 4. Порядки мира ========== -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-users"></i> 4. Порядки мира</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p><strong>Народы мира</strong><br>Основные этнические группы: Акех (юго-запад, темнокожие), Дин (центральные регионы, бледнокожие) и Рен (юг, бронзовая кожа, прямые чёрные волосы). За тысячу лет произошло сильное смешение. Встречаются потомки древней магии с нечеловеческими чертами.</p>
+        <p><strong>Языки</strong><br>Большинство современных языков происходят от трёх древних. Существует торговый жаргон. В таблице ниже перечислены основные носители.</p>
+        <div class="table-wrapper">
+          <table class="lore-table">
+            <thead><tr><th>Язык</th><th>Носители</th></tr></thead>
+            <tbody>
+              <tr><td>Классический ренский</td><td>Дулумбайские чиновники, учёные</td></tr>
+              <tr><td>Современный ренский</td><td>Дулумбаи, Равнины Тоба, рабы в Патрии</td></tr>
+              <tr><td>Солёный ренский</td><td>Касирутанский Архипелаг</td></tr>
+              <tr><td>Старый динский</td><td>Учёные и историки</td></tr>
+              <tr><td>Стагнир</td><td>Ульстангские Рифы, Лом</td></tr>
+              <tr><td>Пелагик</td><td>Светлая Республика, Ревуны</td></tr>
+              <tr><td>Молвь</td><td>Нездохва, Рактия</td></tr>
+              <tr><td>Древний акехский</td><td>Учёные и историки</td></tr>
+              <tr><td>Патрийский</td><td>Патрийская Империя, Виссио, рабы в Дулумбаи</td></tr>
+              <tr><td>Керез</td><td>Анкалия и её рыцарские ордены</td></tr>
+              <tr><td>Менет</td><td>Государства-Оазисы и песчаные принцы</td></tr>
+              <tr><td>Торговый жаргон</td><td>Купцы, торговцы, путешественники</td></tr>
+              <tr><td>Святая речь</td><td>Местные из Тысячи Богов</td></tr>
+              <tr><td>Изначальный</td><td>Ангелы и теурги</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Климат</strong> – результат работы небесных механизмов. На большей части мира предсказуемая погода, но есть зоны аномалий. <strong>Технология</strong> в целом соответствует позднему Средневековью, но есть анклавы высоких технологий (Светлая Республика, Нездохва, Виссио), поддерживаемые магией.</p>
+        <p><strong>Магия</strong> распространена, но настоящие колдуны редки. Артефакты создаются только для невозможных иным способом задач. <strong>Торговля</strong> связывает все государства, несмотря на конфликты.</p>
+        <p><strong>Религия</strong> хаотична. Самая распространённая – Церковь Единого (унитарии), которая гарантирует душам покой за погребальную плату. Культы предков распространены среди ренских народов. Атеократия Лома отвергает всех богов. Меньшие религии и опасные культы паразитных богов также присутствуют.</p>
+        <p><strong>Войны и конфликты</strong>: Патрия против Дулумбаи (тысячелетняя война), набеги ульстангцев, вторжение Несотворённых в Анкалию, междоусобицы в Рактии, пограничные стычки по всему континенту.</p>
+      </div>
+    </div>
+
+    <!-- ========== 5. Руководство игроков по миру (краткие итоги) ========== -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-dice-d20"></i> 5. Руководство игроков по миру</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p>Для быстрой ориентации ниже приведены краткие характеристики государств (в алфавитном порядке), которые можно использовать при выборе происхождения персонажа или планировании приключений.</p>
+        <ul>
+          <li><strong>Анкалия</strong> – разорённая чумой и монстрами земля, выжившие ютятся в прибрежных анклавах.</li>
+          <li><strong>Атеократия Лома</strong> – антижрецы Истинного Разума правят железной рукой, используя артефакт Костёр.</li>
+          <li><strong>Виссио</strong> – города-государства купцов и художников, политические интриги и наёмные убийцы.</li>
+          <li><strong>Государства-Оазисы</strong> – пирамиды-аркологии, евгеника знати, песчаные принцы.</li>
+          <li><strong>Далёкие Земли</strong> – загадочные миры за Ночью, источник инопланетных существ и магии.</li>
+          <li><strong>Дулумбайское Регентство</strong> – империя учёных-джунзи, вечная война с Патрией, гнетущая иерархия.</li>
+          <li><strong>Касирутанский Архипелаг</strong> – пираты и купцы, лучшие моряки, вулканические острова с руинами.</li>
+          <li><strong>Мрачные Просторы</strong> – проклятая земля изгнанников, убежище паразитных богов и беглецов.</li>
+          <li><strong>Нездохва</strong> – царство автоматонов и крепостных, Железный Царь и Гильдия Мастеров.</li>
+          <li><strong>Патрийская Империя</strong> – милитаризованное рабовладельческое государство, легионы против Дулумбаи.</li>
+          <li><strong>Рактинская Конфедерация</strong> – лесные княжества, Чёрные Академии, монстры, Пожиратели Проклятий.</li>
+          <li><strong>Равнины Тоба</strong> – кочевники-скотоводы и ламаистские монастыри, искусные лучники.</li>
+          <li><strong>Ревуны</strong> – кочевые племена, табу на письменность, превосходные музыканты и укротители зверей.</li>
+          <li><strong>Светлая Республика</strong> – технологический анклав с эфирными узлами, коррупция, упадок узлов.</li>
+          <li><strong>Тысяча Богов</strong> – джунгли, где искусственные боги правят племенами, воины-Безбожники.</li>
+          <li><strong>Ульстангские Рифы</strong> – королевы-ведьмы, некромантия, драугры-рабы, пиратские рейды.</li>
+        </ul>
+        <p>Выберите государство, которое лучше всего подходит для вашего героя, или используйте Далёкие Земли, если хотите привнести необычное происхождение.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 1.5rem; font-size: 0.7rem; text-align: center; color: #7b623c; border-top: 1px solid #e4d3b5; padding-top: 0.8rem;">
+      <i class="fas fa-feather-alt"></i> Хроники Аркема — полная версия лора. Мир ждёт своих героев.
+    </div>
+  </div>
+</div>
+
+<script>
+  // Плавная анимация раскрытия разделов
+  const sections = document.querySelectorAll('.rule-section');
+  sections.forEach((section, index) => {
+    const header = section.querySelector('.section-header');
+    const content = section.querySelector('.section-content');
+    if (!header || !content) return;
+    const icon = header.querySelector('i:last-child');
+    // По умолчанию первый раздел открыт
+    if (index === 0) {
+      content.classList.add('open');
+      header.classList.add('open');
+    } else {
+      content.classList.remove('open');
+      header.classList.remove('open');
+    }
+    header.addEventListener('click', () => {
+      content.classList.toggle('open');
+      header.classList.toggle('open');
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,656 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Правила настольной игры | Старая книга</title>
+  <!-- Шрифты с историческим/винтажным характером -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* все стили остаются без изменений, они уже есть в предыдущих версиях */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #2b2118;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      font-family: 'EB Garamond', 'Georgia', 'Times New Roman', serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" opacity="0.2"><path fill="none" d="M0 0h400v300H0z"/><path fill="%23806040" d="M10 10 L20 5 L30 12 L40 7 L50 13 L60 9 L70 15 L80 11 L90 17 L100 12 L110 18 L120 14 L130 19 L140 15 L150 20 L160 16 L170 21 L180 17 L190 22 L200 18 L210 23 L220 19 L230 24 L240 20 L250 25 L260 21 L270 26 L280 22 L290 27 L300 23 L310 28 L320 24 L330 29 L340 25 L350 30 L360 26 L370 31 L380 27 L390 32 L400 28" stroke="%23806040" stroke-width="0.6" fill="none"/><circle cx="45" cy="85" r="2" fill="%23806040"/><circle cx="120" cy="140" r="1.5" fill="%23806040"/><circle cx="290" cy="210" r="2" fill="%23806040"/><path d="M70 250 L80 248 L90 252 L100 249 L110 253" stroke="%23806040" stroke-width="0.8" fill="none"/></svg>');
+      background-repeat: repeat;
+      background-size: 200px;
+      pointer-events: none;
+      opacity: 0.15;
+      z-index: 0;
+    }
+
+    .book {
+      max-width: 1200px;
+      width: 100%;
+      background: #fdf8e7;
+      background-image: radial-gradient(circle at 25% 40%, rgba(180, 130, 80, 0.08) 1.5%, transparent 1.5%),
+                        radial-gradient(circle at 70% 85%, rgba(140, 90, 40, 0.08) 2%, transparent 2%);
+      background-size: 32px 32px, 48px 48px;
+      border-radius: 12px 24px 24px 12px;
+      box-shadow: 0 30px 45px -20px rgba(0,0,0,0.6), 0 0 0 1px #c9b27c, 0 0 0 8px #3e2a1f, 0 0 0 12px #5c3f28;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 2rem;
+    }
+
+    .book::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 28px;
+      height: 100%;
+      background: repeating-linear-gradient(90deg, #8b5a2b, #6b3e1a 3px, #a5723e 5px, #7b4a23 8px);
+      border-radius: 8px 0 0 8px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+      z-index: 3;
+    }
+
+    .book::after {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 4px;
+      width: 20px;
+      height: calc(100% - 30px);
+      border-left: 1px solid rgba(255,215,130,0.5);
+      border-right: 1px solid rgba(255,215,130,0.3);
+      pointer-events: none;
+    }
+
+    .page {
+      padding: 2.2rem 2.8rem 2.8rem 3.2rem;
+      position: relative;
+      background: rgba(253, 248, 231, 0.95);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .page .corner {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #c9aa6b;
+      pointer-events: none;
+    }
+    .corner-tl { top: 20px; left: 20px; border-top: 2px solid #c9aa6b; border-left: 2px solid #c9aa6b; border-right: none; border-bottom: none; }
+    .corner-tr { top: 20px; right: 20px; border-top: 2px solid #c9aa6b; border-right: 2px solid #c9aa6b; border-left: none; border-bottom: none; }
+    .corner-bl { bottom: 20px; left: 20px; border-bottom: 2px solid #c9aa6b; border-left: 2px solid #c9aa6b; border-top: none; border-right: none; }
+    .corner-br { bottom: 20px; right: 20px; border-bottom: 2px solid #c9aa6b; border-right: 2px solid #c9aa6b; border-top: none; border-left: none; }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      background: rgba(45, 35, 25, 0.7);
+      backdrop-filter: blur(4px);
+      padding: 0.6rem 1rem;
+      border-radius: 48px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .nav-links a {
+      color: #f3e5c0;
+      font-family: 'Cinzel', serif;
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      transition: 0.2s;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+    }
+    .nav-links a:hover {
+      color: #ffecb3;
+      background: rgba(100, 70, 40, 0.5);
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #c2a156;
+      display: inline-block;
+      width: auto;
+      padding-bottom: 0.3rem;
+      letter-spacing: 2px;
+    }
+    h1 {
+      font-family: 'Cinzel', 'Times New Roman', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #4d2f14;
+      text-shadow: 1px 1px 0 #e9dbbc;
+    }
+    .subhead {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      color: #8b6946;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    .rule-section {
+      margin-bottom: 1.8rem;
+      border: 1px solid #e2d0ae;
+      border-radius: 12px;
+      background: rgba(250, 245, 235, 0.7);
+      overflow: hidden;
+    }
+    .section-header {
+      background: #e9ddc5;
+      padding: 0.8rem 1.2rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      color: #4d2f14;
+      transition: background 0.2s;
+      border-bottom: 1px solid #d6c29d;
+    }
+    .section-header:hover {
+      background: #e1d0b0;
+    }
+    .section-header i:last-child {
+      transition: transform 0.3s ease;
+    }
+    .section-header.open i:last-child {
+      transform: rotate(180deg);
+    }
+    .section-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+      padding: 0 1.5rem;
+      line-height: 1.5;
+      color: #2f241b;
+      font-size: 1rem;
+    }
+    .section-content.open {
+      max-height: 2000px; /* достаточно для любого содержимого */
+      padding: 1.2rem 1.5rem;
+    }
+    .section-content p {
+      margin-bottom: 0.8rem;
+    }
+    .section-content ul, .section-content ol {
+      margin-left: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+    .section-content li {
+      margin-bottom: 0.4rem;
+    }
+    .rule-highlight {
+      background: #f7efdb;
+      border-left: 4px solid #b88746;
+      padding: 0.5rem 1rem;
+      margin: 0.8rem 0;
+      font-style: italic;
+    }
+    .example {
+      background: #f2ebdb;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin: 0.8rem 0;
+      border: 1px solid #decb9e;
+    }
+
+    /* Общий стиль для таблиц с горизонтальной прокруткой */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0;
+      border-radius: 8px;
+    }
+    .damage-table, .level-table, .invocation-table, .scale-table, .resistance-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fdf7e8;
+      border: 1px solid #d6c29d;
+      min-width: 300px; /* чтобы на очень узких экранах не сжималось до уродства */
+    }
+    .damage-table th, .damage-table td,
+    .level-table th, .level-table td,
+    .invocation-table th, .invocation-table td,
+    .scale-table th, .scale-table td,
+    .resistance-table th, .resistance-table td {
+      border: 1px solid #d6c29d;
+      padding: 0.5rem;
+      text-align: center;
+      vertical-align: top;
+    }
+    .damage-table th, .level-table th, .invocation-table th,
+    .scale-table th, .resistance-table th {
+      background: #e9ddc5;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+    }
+
+    .download-block {
+      margin: 2rem 0 1rem;
+      text-align: center;
+    }
+    .download-btn {
+      background: #c8a86b;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: #2c1d0e;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    .download-btn:hover {
+      background: #b88942;
+      transform: scale(1.02);
+    }
+
+    @media (max-width: 800px) {
+      body { padding: 1rem; }
+      .book::before { width: 18px; }
+      .page { padding: 1.5rem 1.2rem 1.8rem 2rem; }
+      h1 { font-size: 1.4rem; }
+      .corner { width: 25px; height: 25px; }
+      .section-header { font-size: 0.9rem; }
+      .section-content { font-size: 0.9rem; }
+      .section-content.open { padding: 1rem; }
+    }
+
+    .book { animation: fadeBook 0.7s ease-out; }
+    @keyframes fadeBook {
+      0% { opacity: 0; transform: translateY(20px) rotateX(-3deg); }
+      100% { opacity: 1; transform: translateY(0) rotateX(0); }
+    }
+    .editable-hint {
+      font-size: 0.7rem;
+      color: #a27e4a;
+      border-top: 1px dashed #d4bd86;
+      margin-top: 0.5rem;
+      padding-top: 0.3rem;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav-links">
+  <a href="index.html"><i class="fas fa-home"></i> Главная</a>
+  <a href="rules.html"><i class="fas fa-dice-d20"></i> Правила</a>
+  <a href="words.html"><i class="fas fa-meteor"></i> Слова Творения</a>
+  <a href="lore.html"><i class="fas fa-scroll"></i> Лор</a>
+  <a href="bestiary.html"><i class="fas fa-dragon"></i> Бестиарий существ</a>
+  <a href="tools.html"><i class="fas fa-tools"></i> Инструменты мастера</a>
+  <a href="download.html"><i class="fas fa-download"></i> Скачать</a>
+</div>
+
+<div class="book">
+  <div class="page">
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <div style="text-align: center;">
+      <div class="page-title">
+        <h1>⚔️ Кодекс правил ⚔️</h1>
+        <div class="subhead">Свод законов настольного мира</div>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 1: Создание персонажа -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-user-plus"></i> 1. Создание персонажа</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p><strong>Создаём своего героя</strong><br>Для создания своего новоявленного полубога вы можете воспользоваться этими шагами. Лист персонажа пронумерован, чтобы показать, куда идёт каждый пункт.</p>
+        <ol>
+          <li><strong>Атрибуты:</strong> бросьте 4к6 шесть раз, отбрасывая меньшую кость, и распределите результаты по шести атрибутам. Либо используйте готовый набор: 16, 14, 13, 13, 10, 8 в любом порядке.</li>
+          <li><strong>Модификаторы атрибутов:</strong></li>
+          <ul>
+          <li>3 → -3</li>
+          <li>4-5 → -2</li>
+          <li>6-8 → -1</li>
+          <li>9-12 → +0</li>
+          <li>13-15 → +1</li>
+          <li>16-17 → +2</li>
+          <li>18 → +3</li>
+        </ul>
+          <li><strong>Проверки атрибутов:</strong> значение проверки = 21 − значение атрибута. Бросок 1к20 ≥ проверки — успех.</li>
+          <li><strong>Три Факта:</strong> о происхождении, навыках выживания и важных связях. Факт даёт +4 к проверке, если уместен.</li>
+          <li><strong>Три Слова:</strong> выберите из главы «Божественные Силы». Они определяют ваши божественные способности.</li>
+          <li><strong>Способности Слов:</strong> запишите особые силы, даваемые выбранными Словами.</li>
+          <li><strong>Божественные дары:</strong> потратьте 6 очков. Малый дар — 1 очко, большой — 2 очка. За 3 очка можно взять дополнительное Слово.</li>
+          <li><strong>Спасброски:</strong> Стойкость = 15 − max(мод. Силы, Тел.); Уклонение = 15 − max(мод. Ловк., Инт.); Дух = 15 − max(мод. Мудр., Харизмы).</li>
+          <li><strong>Оружие:</strong> бонус попадания = мод. атрибута +1; повреждения = кость оружия + мод. атрибута. Кость Схватки — обычно 1к8.</li>
+          <li><strong>Броня:</strong> лёгкая — без штрафов; средняя — штраф -4 к одной категории спасбросков; тяжёлая — штраф -4 к двум категориям. КБ = 9 − мод. Ловк. (не хуже 9).</li>
+          <li><strong>Хит-пойнты:</strong> 8 + мод. Телосложения.</li>
+          <li><strong>Усилие:</strong> равно 2 (если не увеличивалось дарами).</li>
+          <li><strong>Богатство:</strong> начинаете с 0.</li>
+          <li><strong>Опыт и Владычество:</strong> начинаете с 0.</li>
+          <li><strong>Влияние:</strong> начинаете с 2.</li>
+          <li><strong>Имя и цель:</strong> определите внешность, характер и текущую цель героя.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 2: Проверки атрибутов -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-dice-d20"></i> 2. Проверки атрибутов</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p>Проверка атрибута проводится, когда герой пытается совершить нечто, испытывающее пределы его возможностей. Целевое значение = 21 − значение атрибута. Бросок 1к20 +4 (если помогает Факт) должен быть ≥ проверки. Натуральная 1 — провал, 20 — успех (если успех возможен). При противостоянии обе стороны бросают, и побеждает тот, чей результат выше. Сложные задачи могут давать штраф до -8.</p>
+        <div class="example">Пример: Сила 16 → проверка 5 (21−16). При наличии Факта «Непобедимый борец» бросок получает +4.</div>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 3: Спасброски -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-shield-alt"></i> 3. Спасброски</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p><strong>Стойкость</strong> (против яда, утомления, трансформаций) = 16 − уровень − max(мод. Сил, Тел).<br>
+        <strong>Уклонение</strong> (от взрывов, лучей смерти) = 16 − уровень − max(мод. Ловк, Инт).<br>
+        <strong>Дух</strong> (контроль сознания, проклятия) = 16 − уровень − max(мод. Мудр, Хар).<br>
+        Бросок 1к20 ≥ значения — успех. Натуральная 1 — провал, 20 — успех.</p>
+        <div class="rule-highlight">Обожествлённый может автоматически пройти проваленный спасбросок, приложив Усилие.</div>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 4: Прогресс персонажей и повышение уровня -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-chart-line"></i> 4. Прогресс персонажей и повышение уровня</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p>Обожествлённые получают силу с помощью великих подвигов и явления своей воли миру. Им нужны и практический опыт мира, и возможность осуществления своих желаний в нём прежде, чем они будут готовы освоить новые дары.</p>
+        <p><strong>Очки опыта (ОП)</strong> начисляются за выполнение достойных задач, подвергающих испытанию способности Обожествлённых. Свержение смертного тирана может быть серьёзным испытанием для низкоуровневого пантеона, в то время как опытные полубоги сделают это походя. Победа над богом-королём проклятого королевства станет вызовом даже для величайших героев.</p>
+        <p><strong>Очки Владычества (ОВ)</strong> получают за великие подвиги, почитание культа и поглощение божественных реликвий. Они тратятся на постоянные изменения в мирах или создание собственного Рая. Обожествлённый, не затративший достаточно Владычества, не принял свою царственную волю по-настоящему.</p>
+        <p><strong>Получение уровня</strong> происходит, когда герой набирает требуемый опыт и тратит необходимое Владычество на свои проекты. При повышении уровня:</p>
+        <ul>
+          <li>Бонус атаки увеличивается на 1.</li>
+          <li>Максимум хит-пойнтов увеличивается на 4 + (половина модификатора Телосложения, округление вверх).</li>
+          <li>Максимум Усилия и Влияния увеличивается на 1.</li>
+          <li>Каждое из значений спасбросков уменьшается на 1.</li>
+          <li>Добавляется новый Факт, связанный с приключениями или свершениями.</li>
+        </ul>
+        <p>После получения уровня игрок может потратить 2 очка на дополнительные дары известных Слов. Меньшие дары стоят 1 очко, большие — 2. Можно отложить очки для последующих покупок или для получения нового Слова за 3 очка. По усмотрению Ведущего, герои могут покупать меньшие дары других Слов за 2 очка каждое, если объяснят, как их способности создают такой эффект. При связывании с новым Словом, в котором ранее приобретались дары по увеличенной стоимости, наценка возвращается.</p>
+        <p>Таблица уровней (до 10-го уровня):</p>
+        <div class="table-wrapper">
+          <table class="level-table">
+            <thead>
+              <tr><th>Уровень</th><th>Требуемый опыт</th><th>Потрачено Владычества</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>0</td><td>0</td></tr>
+              <tr><td>2</td><td>3</td><td>2</td></tr>
+              <tr><td>3</td><td>6</td><td>4</td></tr>
+              <tr><td>4</td><td>12</td><td>10</td></tr>
+              <tr><td>5</td><td>24</td><td>22</td></tr>
+              <tr><td>6</td><td>48</td><td>38</td></tr>
+              <tr><td>7</td><td>72</td><td>57</td></tr>
+              <tr><td>8</td><td>96</td><td>76</td></tr>
+              <tr><td>9</td><td>130</td><td>95</td></tr>
+              <tr><td>10</td><td>170</td><td>124</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 5: Бой -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-fist-raised"></i> 5. Бой</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p><strong>Раунд боя (≈6 секунд):</strong> игроки действуют первыми, если не застигнуты врасплох. За ход можно переместиться (обычно 30 футов) и совершить одно действие (атака, использование дара, повторное движение). Свободные действия не тратят ход.</p>
+        <p><strong>Атака:</strong> 1к20 + бонус атаки (мод. атрибута +1) + КБ цели ≥ 20 — попадание. Натуральная 1 — промах, 20 — попадание. При отступлении без действия противник получает свободную атаку.</p>
+        <p><strong>Повреждения:</strong> бросьте кость оружия + мод. атрибута, затем сверьте результат с таблицей:</p>
+        <div class="table-wrapper">
+          <table class="damage-table">
+            <thead><tr><th>Бросок на повреждения</th><th>Полученный урон</th></tr></thead>
+            <tbody>
+              <tr><td>1 или меньше</td><td>Нет</td></tr>
+              <tr><td>2–5</td><td>1 очко</td></tr>
+              <tr><td>6–9</td><td>2 очка</td></tr>
+              <tr><td>10 или больше</td><td>4 очка</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Если атака наносит более одной кости, каждая обсчитывается отдельно, модификатор применяется только к одной кости. Переполняющий урон может поразить дополнительных целей с таким же или худшим КБ.</p>
+        <p><strong>Кости Схватки:</strong> каждый раунд герой может бросить кость Схватки (обычно 1к8) без модификатора и нанести урон по таблице любому меньшему противнику (хит-дайсы ≤ уровню героя). Против достойных врагов кость Схватки бесполезна.</p>
+        <p><strong>Боевой дух:</strong> когда противник получает причину бежать (смерть союзника, потеря половины отряда и т.п.), он бросает 2к6; если результат > Боевого Духа (обычно 2–12), он бежит.</p>
+        <p><strong>Смерть и умирание:</strong> при нуле хит-пойнтов герой смертельно ранен и беспомощен, умрёт от дальнейшего урона. Через час восстанавливает 1 хит-пойнт.</p>
+        <p><strong>Божественная ярость:</strong> при достижении 0 хит-пойнтов можно войти в ярость: мгновенно получить половину максимума хит-пойнтов (округление вверх) и Усилие, равное уровню. Длится уровень раундов, затем 5 раундов беспомощности. Повторно доступна только после получения нового уровня.</p>
+        <p><strong>Лечение и восстановление:</strong> день отдыха восстанавливает все хит-пойнты. Каждое утро возвращается всё приложенное Усилие. Магическое лечение требует от получателя приложить Усилие до конца дня.</p>
+        <p><strong>Задержка действия:</strong> можно описать условие и отложить действие до его наступления.</p>
+        <p><strong>Конфликтующие дары:</strong> защита превосходит атаку. В остальных случаях — встречная проверка атрибутов, при ничьей побеждает игрок.</p>
+        <p><strong>Несмертельная победа:</strong> если атака может быть несмертельной (кулаки, дуэльные клинки), врага можно оглушить, а не убить.</p>
+        <p><strong>Мгновенные защитные чудеса:</strong> защитное рассеивание (Мгновенное действие) требует приложить Усилие. Рассеивать можно только способности, направленные непосредственно на защищающегося, с разумным противодействием Слов. Обычные физические атаки не рассеиваются.</p>
+        <p><strong>Сражающиеся с несколькими действиями:</strong> некоторые сильные противники имеют 2–3 действия за раунд. Обожествлённые редко получают более одного действия.</p>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 6: Божественные силы. Небесные дары и могучая теургия (сокращённо) -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-meteor"></i> 6. Божественные силы. Небесные дары и могучая теургия</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p>Каждый Обожествлённый благословлён определёнными божественными Словами Творения. Дары – это чудеса, в которых герой достаточно практиковался. Приведённые здесь дары это лишь примеры и рекомендации. Герой может создать множество уникальных даров при согласии Ведущего.</p>
+        <p><strong>Усилие</strong> – запас божественной энергии. Начинающий герой имеет 2 очка Усилия. Дары часто требуют, чтобы Усилие было Приложено к ним. Возвращение Усилия мгновенно.</p>
+        <p><strong>Дары</strong> бывают меньшие и большие, а также делятся на категории: Постоянный, На Ходу, Действие, Мгновенный. Меньшие дары затрагивают героя или его окружение, большие — целые города и регионы.</p>
+        <p><strong>Противники и особые обстоятельства:</strong> меньшие противники – существа с хит-дайсами ≤ уровню героя. Достойные противники – враги с большим количеством хит-дайсов. Обожествлённые всегда достойные противники.</p>
+        <p><strong>Чудеса</strong> – более затратный способ проявить силу. Используются, когда нет подходящего дара. Чудо может имитировать дар, подавить другой дар, рассеять магию смертных или создать внушительный эффект.</p>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 7: Магия, Колдовство и Теургические призывы -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-hat-wizard"></i> 7. Магия, Колдовство и Теургические призывы</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p>Существует две основные формы магии: меньшие искусства (низкая магия) и секреты высокой теургии. Низкая магия требует Факта о владении традицией, для сотворения заклинаний нужны ритуалы (от 15 минут до дня). Заклинания не могут затрагивать ничего за пределами видимости, длятся до следующего восхода, не создают постоянную материю.</p>
+        <p>Теургия доступна только Обожествлённым и величайшим магам. Она делится на три ступени: Врат, Пути, Трона. Призывы изучаются недели/месяцы, могут твориться медленно (без Усилия), быстро (с Усилием до конца сцены) или мгновенно (с Усилием до конца дня и получением урона). Теургия может создавать постоянные изменения, но не заменяет дары и Влияние.</p>
+        <div class="table-wrapper">
+          <table class="invocation-table">
+            <thead><tr><th>Призыв</th><th>Время обучения</th><th>Медленное</th><th>Быстрое*</th><th>Мгновенное#</th></tr></thead>
+            <tbody>
+              <tr><td>Врат</td><td>1 неделя</td><td>1 час</td><td>1 раунд</td><td>1к6 урона</td></tr>
+              <tr><td>Путь</td><td>1 месяц</td><td>12 часов</td><td>2 раунда</td><td>1к12 урона</td></tr>
+              <tr><td>Трон</td><td>3 месяца</td><td>1 день</td><td>3 раунда</td><td>1к20 урона</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>* требует приложить Усилие до конца сцены<br># требует приложить Усилие до конца дня</p>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 8: Изменение мира игроками -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-globe-asia"></i> 8. Изменение мира игроками</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p>Обожествлённые – это прото-божества, и подобные мужчины и женщины естественно будут оказывать серьёзное воздействие на окружающий их мир. Их цели, амбиции, ненависть и любовь оставят на мире свои следы, и существует несколько способов, которыми можно осуществить эти изменения.</p>
+
+        <p><strong>Инструменты власти</strong><br>Герои располагают тремя основными ресурсами для привнесения изменений: их природные дары и Слова Творения; <strong>Влияние</strong> (абстрактные очки, представляющие силу их полного внимания и регулярного управления ситуацией); <strong>Владычество</strong> (очки, символизирующие божественные полномочия, тратятся на постоянные изменения).</p>
+
+        <p><strong>Природа фактов</strong><br>Герои используют дары, Влияние и Владычество, чтобы изменять факты – основные истины о месте или ситуации в игровом мире. Простые перемены, которым не противостоят серьёзные силы, могут быть осуществлены дарами или Влиянием, но для бросания вызова королям, божествам и законам природы потребуются подвиги и опасные приключения.</p>
+
+        <p><strong>Способы изменения</strong><br>Самый простой способ – просто сделать это, используя дары или чудеса (например, воздвигнуть особняк). Такие изменения ничего не стоят во Влиянии или Владычестве. Однако если изменения слишком масштабны для простого применения дара, герой может приложить Влияние. Количество Влияния зависит от масштаба и сложности. Влияние должно оставаться приложенным, иначе изменения сойдут на нет.</p>
+
+        <p>Для создания длительных изменений, сохраняющихся без надзора, необходимо потратить <strong>Владычество</strong>. Оно делает результат постоянным, пока какая-то катастрофа или внешняя сила не сокрушит его.</p>
+
+        <p><strong>Изменение фактов дарами и действиями</strong><br>Мгновенные изменения (исцеление чумы, строительство замка) могут быть достигнуты простым использованием даров. Они достаточны для быстрого решения проблемы, но могут не решить глубинных причин.</p>
+
+        <p><strong>Изменение фактов Влиянием</strong><br>Влияние – абстрактное представление закадровой работы для сложных, долговременных изменений. Пока Влияние приложено, герой сохраняет контроль над ситуацией. При возвращении Влияния изменения разрушаются (если нет естественной поддержки).</p>
+
+        <p><strong>Изменение фактов Владычеством</strong><br>Владычество – самый могущественный способ. Невозможные изменения и полностью магические перемены можно осуществить, потратив Владычество. Чем более радикальны и масштабны изменения, тем выше стоимость. Противостояние сверхъестественных сил может препятствовать переменам.</p>
+
+        <p><strong>Определение цены</strong><br>Базовая стоимость изменения зависит от масштаба:</p>
+        <div class="table-wrapper">
+          <table class="scale-table">
+            <thead><tr><th>Масштаб</th><th>Цена</th><th>Описание</th></tr></thead>
+            <tbody>
+              <tr><td>Деревня</td><td>1</td><td>Деревни, несколько квадратных миль, до 1000 человек</td></tr>
+              <tr><td>Город</td><td>2</td><td>Большой город, десять квадратных миль, до 100 000 человек</td></tr>
+              <tr><td>Регион</td><td>4</td><td>Провинция, тысяча квадратных миль, до 1 миллиона</td></tr>
+              <tr><td>Страна</td><td>8</td><td>Целое королевство, до 100 миллионов человек</td></tr>
+              <tr><td>Мир</td><td>16</td><td>Целый мир, миллиарды людей</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Базовая стоимость умножается на сложность: <strong>Правдоподобное</strong> (×1), <strong>Невероятное</strong> (×2), <strong>Невозможное</strong> (×4). Невозможные изменения обычно требуют как минимум одного героического свершения.</p>
+
+        <p><strong>Мирские обереги</strong><br>Древние обереги препятствуют использованию божественной силы. Их рейтинг (1–20) добавляется к базовой стоимости изменения. Оберег можно обойти, разрушив его или найдя ключ.</p>
+
+        <p><strong>Встречные изменения</strong><br>Соперники-Обожествлённые, могущественные маги или сверхъестественные существа могут мешать, добавляя штраф к базовой стоимости (наибольший штраф +1 за каждого значительного противника).</p>
+
+        <p><strong>Расширяющиеся изменения</strong><br>Если герой хочет расширить существующее изменение на большую область или усилить его, он доплачивает разницу во Влиянии или Владычестве.</p>
+
+        <p><strong>Великие деяния и грандиозные приключения</strong><br>Для Невозможных изменений часто требуется совершить великое деяние – приключение, которое занимает целую сессию. Успех облегчает изменение, неудача – усложняет.</p>
+        <p>Таблица сопротивления (базовый штраф):</p>
+        <div class="table-wrapper">
+          <table class="resistance-table">
+            <thead><tr><th>Сопротивление</th><th>Тип Врага</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Меньшие духи, младшие неупокоенные, рассерженный жрец</td></tr>
+              <tr><td>2</td><td>Опытный маг, сильный местный правитель, вырожденный</td></tr>
+              <tr><td>4</td><td>Мистик, Несотворённый гигант, старшая животная тварь</td></tr>
+              <tr><td>6</td><td>Меньший паразитный бог, новенький Обожествлённый Ведущего</td></tr>
+              <tr><td>8</td><td>Старший паразитный бог, опытный Обожествлённый Ведущего</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>Пределы изменения</strong><br>Усиление существ: обычные навыки – Правдоподобно (×1), редкие навыки/элитные воины – Невероятно (×2), создание новых существ или невозможных способностей – Невозможно (×4) и требует приключений. Создание могущественных существ стоит 8 очков Владычества.</p>
+        <p>Создание строений, магии и технологии: если местные могут это сделать – Правдоподобно, если теоретически возможно – Невероятно, если невозможно – Невозможно. Изменения сообществ и правительств: не затрагивающие элиту – Правдоподобно, затрагивающие – Невероятно, немыслимые – Невозможно.</p>
+
+        <p><strong>Использование богатства вместо влияния</strong><br>Деньги могут заменить Влияние, но не Владычество. Одно очко Богатства даёт одно очко Влияния, но стоимость удваивается: 3 Влияния = 6 Богатства.</p>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 9: Культы Обожествлённых -->
+    <div class="rule-section">
+      <div class="section-header">
+        <span><i class="fas fa-church"></i> 9. Культы Обожествлённых</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="section-content">
+        <p>Когда Обожествлённый получает дар Обожествления «Принять Фимиам Веры», он может принимать добровольных последователей и получать пользу от поклонения своих верующих. Поклонение усиливает его божественную власть, позволяя формировать фракцию-культ и использовать её для ежемесячного получения очков Владычества, помимо источником Владычества,культ может предпринимать действие от лица фракции от его имени Обожествлённого. Чем более требовательна вера, тем больше Владычества получает её бог.</p>
+
+        <p><strong>Верующие</strong><br>Разумное смертное существо может стать последователем Обожествлённого, владеющего даром «Принять Фимиам Веры». Обожествлённому не обязательно присутствовать; всё, что необходимо – чтобы потенциальный верующий знал, кто такой Обожествлённый, и добровольно решил посвятить себя этому божеству. Этот выбор не может быть сделан под магическим принуждением. Обожествлённый всегда может сказать, является ли конкретный человек его последователем. Если Обожествлённый недоволен, он может отвергнуть последователя в любой момент. Смертный может следовать только за одним Обожествлённым одновременно.</p>
+
+        <p><strong>Формирование культа</strong><br>Прежде чем сформировать полезный культ, Обожествлённому надо обзавестись количеством последователей, эквивалентным населению деревни (несколько сотен). Это количество верующих формирует фракцию с <strong>Могуществом 1</strong> и полезными <strong>Особенностями</strong>, относящимися к ценностям и убеждениям Обожествлённого (например, «У этого культа сильные боевые традиции»). Особенность выбирает игрок с одобрения Ведущего. Могущество Культа увеличивается по усмотрению Ведущего, когда герой набирает достаточно новых верующих.</p>
+
+        <p><strong>Священные законы и получение Владычества</strong><br>Обожествлённый может дать культу священные законы. Чем взыскательнее и требовательнее правила, тем более щедрый поток Владычества они обеспечивают. Обожествлённый решает, насколько жёсткими будут законы, и культ получает связанное с этими требованиями количество очков <strong>Проблем</strong> (как в правилах фракций). Эти Проблемы не могут быть решены – они присущи поклонению Обожествлённому.</p>
+        <ul>
+          <li><strong>Номинальные требования</strong> – нет очков Проблем. Культ даёт <strong>Владычество = Могуществу</strong> в месяц.</li>
+          <li><strong>Несколько жёстких требований</strong> – Проблемы = ¼ кости действий культа (округление вверх). Даёт <strong>+1 Владычество</strong> в месяц сверх Могущества.</li>
+          <li><strong>Множество жёстких требований</strong> – Проблемы = ½ кости действий. Даёт <strong>+2 Владычества</strong> в месяц.</li>
+          <li><strong>Чрезвычайно суровая вера</strong> – Проблемы = ¾ кости действий (округление вверх). Даёт <strong>+3 Владычества</strong> в месяц.</li>
+        </ul>
+        <div class="rule-highlight">Пример: культ с Могуществом 4 и «несколькими жёсткими требованиями» имеет 1 очко Проблем и приносит 5 Владычества в месяц (4 + 1).</div>
+
+        <p><strong>Свободные божества</strong><br>Не всем Обожествлённым подходит роль лидера культа. По решению игрока Обожествлённый может стать свободным божеством вместо того, чтобы культивировать веру. Это решение принимается при достижении 2-го уровня. Свободные божества теряют все обычные дары Слова Обожествления, но получают <strong>1 очко Владычества каждый месяц + ещё 1 за каждые 3 полных уровня</strong>. Чтобы генерировать эту силу, не нужен культ, и свободные божества не могут иметь настоящих последователей.</p>
+      </div>
+    </div>
+
+    <!-- Блок для скачивания полной книги правил (PDF) -->
+    <div class="download-block">
+      <a href="#" class="download-btn" id="downloadRulesBtn">
+        <i class="fas fa-download"></i> Скачать полную книгу правил (PDF)
+      </a>
+      <div class="editable-hint" style="text-align: center; margin-top: 6px;">
+        <i class="fas fa-link"></i> Укажите правильную ссылку на файл PDF после добавления книги в папку pdf/
+      </div>
+    </div>
+
+    <div style="margin-top: 1.5rem; font-size: 0.7rem; text-align: center; color: #7b623c; border-top: 1px solid #e4d3b5; padding-top: 0.8rem;">
+      <i class="fas fa-feather-alt"></i> Версия правил 1.0 — основана на полной редакции
+    </div>
+  </div>
+</div>
+
+<script>
+  // Плавная анимация раскрытия разделов с вращением иконки
+  const sections = document.querySelectorAll('.rule-section');
+  sections.forEach((section, index) => {
+    const header = section.querySelector('.section-header');
+    const content = section.querySelector('.section-content');
+    const icon = header.querySelector('i:last-child');
+    
+    // По умолчанию первый раздел открыт
+    if (index === 0) {
+      content.classList.add('open');
+      header.classList.add('open');
+    } else {
+      content.classList.remove('open');
+      header.classList.remove('open');
+    }
+    
+    header.addEventListener('click', () => {
+      content.classList.toggle('open');
+      header.classList.toggle('open');
+    });
+  });
+
+  const downloadBtn = document.getElementById('downloadRulesBtn');
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', (e) => {
+      if (downloadBtn.getAttribute('href') === '#') {
+        e.preventDefault();
+        alert('Файл с правилами пока не загружен. Пожалуйста, добавьте PDF в папку "pdf/" и укажите ссылку в кнопке.');
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
