@@ -3,291 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Заглушка | Старая книга правил</title>
-  <!-- Шрифты с историческим/винтажным характером -->
+  <title>Godbound | Хроники Обожествлённых</title>
+  <!-- Шрифты -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Special+Elite&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Общие стили -->
+  <link rel="stylesheet" href="css/main.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #2b2118;  /* тёмное дерево / старый переплёт */
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      position: relative;
-      font-family: 'EB Garamond', 'Georgia', 'Times New Roman', serif;
-    }
-
-    /* текстура старой бумаги на фоне */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" opacity="0.2"><path fill="none" d="M0 0h400v300H0z"/><path fill="%23806040" d="M10 10 L20 5 L30 12 L40 7 L50 13 L60 9 L70 15 L80 11 L90 17 L100 12 L110 18 L120 14 L130 19 L140 15 L150 20 L160 16 L170 21 L180 17 L190 22 L200 18 L210 23 L220 19 L230 24 L240 20 L250 25 L260 21 L270 26 L280 22 L290 27 L300 23 L310 28 L320 24 L330 29 L340 25 L350 30 L360 26 L370 31 L380 27 L390 32 L400 28" stroke="%23806040" stroke-width="0.6" fill="none"/><circle cx="45" cy="85" r="2" fill="%23806040"/><circle cx="120" cy="140" r="1.5" fill="%23806040"/><circle cx="290" cy="210" r="2" fill="%23806040"/><path d="M70 250 L80 248 L90 252 L100 249 L110 253" stroke="%23806040" stroke-width="0.8" fill="none"/></svg>');
-      background-repeat: repeat;
-      background-size: 200px;
-      pointer-events: none;
-      opacity: 0.15;
-      z-index: 0;
-    }
-
-    /* основная книга — имитация разворота */
-    .book {
-      max-width: 1100px;
-      width: 100%;
-      background: #fdf8e7;  /* цвет старой бумаги */
-      background-image: radial-gradient(circle at 25% 40%, rgba(180, 130, 80, 0.08) 1.5%, transparent 1.5%),
-                        radial-gradient(circle at 70% 85%, rgba(140, 90, 40, 0.08) 2%, transparent 2%);
-      background-size: 32px 32px, 48px 48px;
-      border-radius: 12px 24px 24px 12px;
-      box-shadow: 0 30px 45px -20px rgba(0,0,0,0.6), 0 0 0 1px #c9b27c, 0 0 0 8px #3e2a1f, 0 0 0 12px #5c3f28;
-      position: relative;
-      transition: all 0.2s;
-      z-index: 2;
-    }
-
-    /* имитация корешка / переплёта слева */
-    .book::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 28px;
-      height: 100%;
-      background: repeating-linear-gradient(90deg, #8b5a2b, #6b3e1a 3px, #a5723e 5px, #7b4a23 8px);
-      border-radius: 8px 0 0 8px;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.3);
-      z-index: 3;
-    }
-
-    /* золотое тиснение по краю корешка */
-    .book::after {
-      content: "";
-      position: absolute;
-      top: 15px;
-      left: 4px;
-      width: 20px;
-      height: calc(100% - 30px);
-      border-left: 1px solid rgba(255,215,130,0.5);
-      border-right: 1px solid rgba(255,215,130,0.3);
-      pointer-events: none;
-    }
-
-    /* внутренняя страница (отступ под переплёт) */
-    .page {
-      padding: 2.2rem 2.8rem 2.8rem 3.2rem;
-      position: relative;
-      background: rgba(253, 248, 231, 0.95);
-      border-radius: 0 12px 12px 0;
-    }
-
-    /* декоративные уголки */
-    .page .corner {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      border: 1px solid #c9aa6b;
-      pointer-events: none;
-    }
-    .corner-tl {
-      top: 20px;
-      left: 20px;
-      border-top: 2px solid #c9aa6b;
-      border-left: 2px solid #c9aa6b;
-      border-right: none;
-      border-bottom: none;
-    }
-    .corner-tr {
-      top: 20px;
-      right: 20px;
-      border-top: 2px solid #c9aa6b;
-      border-right: 2px solid #c9aa6b;
-      border-left: none;
-      border-bottom: none;
-    }
-    .corner-bl {
-      bottom: 20px;
-      left: 20px;
-      border-bottom: 2px solid #c9aa6b;
-      border-left: 2px solid #c9aa6b;
-      border-top: none;
-      border-right: none;
-    }
-    .corner-br {
-      bottom: 20px;
-      right: 20px;
-      border-bottom: 2px solid #c9aa6b;
-      border-right: 2px solid #c9aa6b;
-      border-top: none;
-      border-left: none;
-    }
-
-    /* заголовок-виньетка */
-    .title-decoration {
+    /* Специфичные стили для главной страницы */
+    .hero {
       text-align: center;
-      margin-bottom: 1.8rem;
-      border-bottom: 1px dashed #c2a156;
-      display: inline-block;
-      width: auto;
-      padding-bottom: 0.3rem;
-      letter-spacing: 2px;
+      margin-bottom: 2rem;
     }
-    h1 {
-      font-family: 'Cinzel', 'Times New Roman', serif;
-      font-size: 1.7rem;
-      font-weight: 600;
-      color: #4d2f14;
-      text-shadow: 1px 1px 0 #e9dbbc;
-      margin-bottom: 0.2rem;
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
     }
-    .subhead {
+    .hero .tagline {
       font-family: 'Special Elite', monospace;
-      font-size: 0.7rem;
+      font-size: 0.9rem;
       letter-spacing: 2px;
       color: #8b6946;
-      text-transform: uppercase;
     }
-
-    /* основной текст в стиле рукописи */
-    .message p {
+    .intro-text {
       font-size: 1.05rem;
-      line-height: 1.55;
-      margin-bottom: 1.1rem;
-      color: #2f241b;
-      font-weight: 500;
+      line-height: 1.6;
+      margin-bottom: 2rem;
     }
-    .highlight {
-      background: rgba(180, 130, 70, 0.2);
-      padding: 0.1rem 0.3rem;
-      font-style: italic;
-      border-radius: 4px;
-      font-weight: 600;
-      color: #5a3a1f;
+    .intro-text p {
+      margin-bottom: 1rem;
     }
-    .lazy-quote {
-      font-family: 'Special Elite', monospace;
-      font-size: 0.9rem;
-      border-left: 3px solid #b88746;
-      padding-left: 1.2rem;
-      margin: 1.5rem 0;
-      color: #6e4f2c;
-      background: rgba(210, 180, 120, 0.1);
-      border-radius: 0 8px 8px 0;
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
     }
-
-    /* блок статуса "Хтоя?" */
-    .current-status {
-      background: #f5ecda;
-      border: 1px solid #dbbc87;
-      border-radius: 24px;
-      padding: 0.8rem 1.4rem;
-      margin: 1.8rem 0;
-      box-shadow: inset 0 0 6px rgba(110, 70, 30, 0.1), 2px 3px 6px rgba(0,0,0,0.05);
-      font-family: 'EB Garamond', serif;
+    .feature-card {
+      background: rgba(250, 245, 235, 0.7);
+      border: 1px solid #e2d0ae;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .status-text {
-      font-size: 1.2rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      background: #fefcf5;
     }
-    .status-text i {
-      color: #b5752e;
+    .feature-card i {
+      font-size: 2rem;
+      color: #b88746;
+      margin-bottom: 0.8rem;
+      display: inline-block;
     }
-    .ancient-mark {
-      background: #e4d5bc;
-      padding: 0.2rem 0.7rem;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      font-weight: bold;
+    .feature-card h3 {
       font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #4d2f14;
     }
-    .current-status .small-note {
-      font-size: 0.75rem;
-      margin-top: 6px;
-      opacity: 0.8;
-      font-style: italic;
+    .feature-card p {
+      font-size: 0.9rem;
+      color: #3e2a1f;
     }
-
-    /* блок "есть идеи" с пером */
-    .callout {
-      background: #f3ecdf;
-      border-radius: 16px;
-      padding: 1.2rem 1.5rem;
-      margin: 1.8rem 0;
-      border-left: 6px solid #b88746;
-      box-shadow: 3px 3px 8px rgba(0,0,0,0.05);
+    .feature-card a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
-    .callout i {
-      color: #a5682a;
-      margin-right: 0.5rem;
-    }
-    .contact-line {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 0.8rem;
-    }
-    .fake-button {
-      background: #fef5e6;
-      border: 1px solid #ccaa70;
-      padding: 0.4rem 1rem;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-family: 'Special Elite', monospace;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: default;
-      transition: 0.2s;
-    }
-    .fake-button:hover {
-      background: #ecdbaa;
-      border-color: #aa7a3c;
-    }
-
-    /* хостинг / винтажный блок */
-    .hosting-notes {
-      background: #e7dcc8;
-      border-radius: 12px;
-      padding: 0.8rem 1.2rem;
+    .update-block {
+      background: #f7efdb;
+      border-left: 4px solid #b88746;
+      padding: 1rem;
       margin: 1.5rem 0;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      border: 1px solid #cfb271;
-    }
-    .hosting-options i {
-      font-size: 1.6rem;
-      margin-left: 8px;
-      color: #7a5a36;
-      transition: 0.2s;
-    }
-    .hosting-options i:hover {
-      color: #c6862e;
-    }
-
-    /* план / что будет на сайте */
-    .roadmap {
-      background: #f1e8d9;
-      border-radius: 12px;
-      padding: 0.8rem 1.2rem;
-      margin: 1.2rem 0;
-      border: 1px dashed #c8aa6e;
+      font-style: italic;
     }
     .footer-note {
       margin-top: 2rem;
@@ -302,86 +92,33 @@
       flex-wrap: wrap;
       font-family: 'Special Elite', monospace;
     }
-
-    /* иллюстрации и украшения */
-    .seal {
-      position: absolute;
-      bottom: 25px;
-      right: 35px;
-      width: 55px;
-      height: 55px;
-      background: #c99e5b;
-      border-radius: 50%;
-      opacity: 0.3;
-      filter: blur(2px);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* адаптив */
     @media (max-width: 700px) {
-      body {
-        padding: 1rem;
+      .hero h1 {
+        font-size: 1.8rem;
       }
-      .book {
-        box-shadow: 0 15px 25px -10px black, 0 0 0 4px #3e2a1f, 0 0 0 8px #5c3f28;
-      }
-      .book::before {
-        width: 18px;
-      }
-      .page {
-        padding: 1.5rem 1.2rem 1.8rem 2rem;
-      }
-      .message p {
+      .intro-text {
         font-size: 0.95rem;
       }
-      .status-text {
-        font-size: 1rem;
+      .feature-grid {
+        grid-template-columns: 1fr;
       }
-      .corner {
-        width: 25px;
-        height: 25px;
-      }
-      .corner-tl, .corner-tr, .corner-bl, .corner-br {
-        border-width: 1px;
-      }
-      h1 {
-        font-size: 1.3rem;
-      }
-    }
-
-    /* анимация "появление страницы" */
-    .book {
-      animation: fadeBook 0.7s ease-out;
-    }
-    @keyframes fadeBook {
-      0% {
-        opacity: 0;
-        transform: translateY(20px) rotateX(-3deg);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0) rotateX(0);
-      }
-    }
-
-    /* прочие детали */
-    .ink-smudge {
-      position: absolute;
-      bottom: 60px;
-      left: 40px;
-      width: 80px;
-      height: 35px;
-      background: radial-gradient(ellipse, rgba(100,60,20,0.08) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
     }
   </style>
 </head>
 <body>
+
+<div class="nav-links">
+  <a href="index.html" class="active"><i class="fas fa-home"></i> Главная</a>
+  <a href="rules.html"><i class="fas fa-dice-d20"></i> Правила</a>
+  <a href="words.html"><i class="fas fa-meteor"></i> Слова Творения</a>
+  <a href="lore.html"><i class="fas fa-scroll"></i> Лор</a>
+  <a href="bestiary.html"><i class="fas fa-dragon"></i> Бестиарий</a>
+  <a href="tools.html"><i class="fas fa-tools"></i> Инструменты мастера</a>
+  <a href="download.html"><i class="fas fa-download"></i> Скачать</a>
+</div>
+
 <div class="book">
   <div class="page">
-    <!-- декоративные уголки страницы -->
     <div class="corner corner-tl"></div>
     <div class="corner corner-tr"></div>
     <div class="corner corner-bl"></div>
@@ -389,96 +126,57 @@
     <div class="ink-smudge"></div>
     <div class="seal"></div>
 
-    <!-- шапка в стиле манускрипта -->
-    <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 1.2rem;">
-      <div class="title-decoration">
-        <h1>Godbound</h1>
-        <div class="subhead">SHARDS DIVINITY · КНИГА ЗАГЛУШКА</div>
+    <div class="hero">
+      <h1>Godbound</h1>
+      <div class="tagline">ХРОНИКИ ОБОЖЕСТВЛЁННЫХ</div>
+    </div>
+
+    <div class="intro-text">
+      <p><strong>Добро пожаловать, странник.</strong> Ты держишь в руках собрание манускриптов, посвящённых миру Аркема — осколку былой реальности, где законы природы трещат по швам, а древние боги пали, оставив после себя лишь эхо силы. Здесь смертные обретают искру божественного, становясь <strong>Обожествлёнными</strong> — полубогами, способными переписать судьбу целых государств.</p>
+      <p>Этот сайт — путеводитель по правилам, лору, существам и тайнам настольной ролевой игры <strong>Godbound</strong>. Здесь ты найдёшь всё необходимое для создания своего героя, управления пантеоном и исследования руин Небес.</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <a href="lore.html">
+          <i class="fas fa-scroll"></i>
+          <h3>Лор мира</h3>
+          <p>История Раскола, падение Небес, государства Аркема и великие тайны прошлого.</p>
+        </a>
       </div>
-      <div style="font-family: 'Special Elite', monospace; font-size: 0.7rem; background: #e7d9c4; padding: 0.2rem 0.7rem; border-radius: 20px;">
-        <i class="fas fa-feather-alt"></i> черновик
+      <div class="feature-card">
+        <a href="words.html">
+          <i class="fas fa-meteor"></i>
+          <h3>Слова Творения</h3>
+          <p>Список божественных сил, даров и теургических призывов, доступных Обожествлённым.</p>
+        </a>
+      </div>
+      <div class="feature-card">
+        <a href="bestiary.html">
+          <i class="fas fa-dragon"></i>
+          <h3>Бестиарий</h3>
+          <p>Описания и характеристики ангелов, несотворённых, паразитных богов и прочих обитателей мира.</p>
+        </a>
+      </div>
+      <div class="feature-card">
+        <a href="download.html">
+          <i class="fas fa-download"></i>
+          <h3>Скачать книги</h3>
+          <p>Полные версии правил, дополнительные материалы и готовые приключения.</p>
+        </a>
       </div>
     </div>
 
-    <!-- основной текст с посланием -->
-    <div class="message">
-      <p>
-        <i class="fas fa-quill" style="color: #a86f32; margin-right: 6px;"></i> 
-        <strong>Так вот, кто читает</strong> — я наконец начал заниматься сайтом, по которому я говорил 
-        <span class="highlight">(да-да, я ленивая жопа)</span>. 
-        Пока висит эта заглушка, надо будет решать, на чём хостить сайт: оставить на GitHub, 
-        другой платформе или вообще на своей локальной машине его хостить…
-      </p>
-      <p>
-        Мне надо будет набросать сам макет для сайта и надо подумать, что на нём должно быть. 
-        Пока у меня в голове просто простой сайт, где почитать подробно про <strong>правила и лор настолки</strong> 
-        и ссылки на скачивание книг правил.
-      </p>
-      <div class="lazy-quote">
-        <i class="fas fa-scroll"></i> «Изначально вся мудрость записана на пергаменте, а ныне — в цифре. Но дух остаётся древним.»
-      </div>
-      <p>
-        Есть идеи или предложения — пишите мне, вы знаете меня и находитесь в беседе.
-      </p>
+    <div class="update-block">
+      <i class="fas fa-feather-alt"></i> <strong>Статус проекта:</strong> Сайт находится в активной разработке. В ближайшее время появятся разделы с правилами, инструментами мастера и полноценным бестиарием. Следите за обновлениями!
     </div>
 
-    <!-- статус Хтоя? в стиле старого манускрипта -->
-    <div class="current-status">
-      <div class="status-text">
-        <i class="fas fa-hourglass-half"></i>
-        <span class="ancient-mark">◈ ТЕКУЩИЙ СТАТУС ◈</span>
-        <span style="font-family: 'Cinzel'; font-size: 1.2rem; font-weight: bold; color:#6b3a1c;">«Хтоя?»</span>
-        <i class="fas fa-ghost"></i>
-      </div>
-      <div class="small-note">
-        <i class="fas fa-pen-fancy"></i> перевоплощаюсь в летописца, ищу ответы на вопросы хостинга, вёрстки и древних свитков
-      </div>
-    </div>
-
-    <!-- блок "есть идеи / предложения" -->
-    <div class="callout">
-      <div><i class="fas fa-comment"></i> <strong>Свиток предложений</strong> — любая мудрость приветствуется!</div>
-      <div class="contact-line">
-        <div class="fake-button"><i class="fab fa-telegram"></i> @ваш_логин_в_беседе</div>
-        <div class="fake-button"><i class="fas fa-envelope-open-text"></i> напиши в личную беседу</div>
-        <div class="fake-button"><i class="fas fa-dice-d20"></i> идеи по лору / правилам</div>
-      </div>
-      <div style="margin-top: 12px; font-size: 0.8rem; background: #e6d9c4; border-radius: 24px; padding: 5px 12px; display: inline-block;">
-        <i class="fas fa-users"></i> ты знаешь, где меня найти — беседа ждёт твоих мыслей
-      </div>
-    </div>
-
-    <!-- блок хостинг и выбор платформы -->
-    <div class="hosting-notes">
-      <div>
-        <i class="fas fa-landmark"></i> <strong>Хранилище свитков (хостинг):</strong> GitHub / локальная машина / иные земли?
-        <span style="font-size:0.75rem; margin-left:6px;">(решается в ближайшее время)</span>
-      </div>
-      <div class="hosting-options">
-        <i class="fab fa-github" title="GitHub Pages"></i>
-        <i class="fas fa-laptop-code" title="Локальный сервер"></i>
-        <i class="fas fa-cloud" title="Другие платформы"></i>
-      </div>
-    </div>
-
-    <!-- краткое содержание будущего сайта + ссылки -->
-    <div class="roadmap">
-      <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-        <div><i class="fas fa-dragon"></i> <strong>Что появится на страницах:</strong></div>
-        <div style="font-size: 0.85rem;">📜 Полный лор настольной вселенной &nbsp;|&nbsp; 🎲 Свод правил &nbsp;|&nbsp; 📖 Скачать книги правил (PDF)</div>
-      </div>
-      <div style="margin-top: 8px; font-size: 0.7rem; border-top: 1px dotted #cfb271; padding-top: 6px;">
-        <i class="fas fa-tools"></i> сейчас идёт написание макета и сбор манускриптов. Заглушка будет заменена, когда книга откроется для всех.
-      </div>
-    </div>
-
-    <!-- нижняя часть с геральдикой -->
     <div class="footer-note">
-      <span><i class="far fa-clock"></i> временная страница · manus in progress</span>
-      <span><i class="fas fa-crown"></i> напомните мне в беседе, если слишком затянул</span>
-      <span><i class="fas fa-feather"></i> статус «Хтоя?» — это стадия осознания великого замысла</span>
+      <span><i class="fas fa-skull"></i> Мир трещит по швам. Но в ваших руках — искра, способная его пересоздать.</span>
     </div>
   </div>
 </div>
+
+<script src="js/main.js"></script>
 </body>
 </html>
