@@ -311,18 +311,14 @@
   <a href="rules.html"><i class="fas fa-dice-d20"></i> Правила</a>
   <a href="words.html"><i class="fas fa-meteor"></i> Слова Творения</a>
   <a href="lore.html"><i class="fas fa-scroll"></i> Лор</a>
-  <a href="bestiary.html"><i class="fas fa-dragon"></i> Бестиарий существ</a>
+  <a href="bestiary.html"><i class="fas fa-dragon"></i> Бестиарий</a>
   <a href="tools.html"><i class="fas fa-tools"></i> Инструменты мастера</a>
   <a href="download.html"><i class="fas fa-download"></i> Скачать</a>
 </div>
 
 <div class="book">
   <div class="page">
-    <div class="corner corner-tl"></div>
-    <div class="corner corner-tr"></div>
-    <div class="corner corner-bl"></div>
-    <div class="corner corner-br"></div>
-
+  
     <div style="text-align: center;">
       <div class="page-title">
         <h1>⚔️ Кодекс правил ⚔️</h1>
@@ -642,14 +638,13 @@
   });
 
   const downloadBtn = document.getElementById('downloadRulesBtn');
-  if (downloadBtn) {
-    downloadBtn.addEventListener('click', (e) => {
-      if (downloadBtn.getAttribute('href') === '#') {
-        e.preventDefault();
-        alert('Файл с правилами пока не загружен. но скоро он появится.');
-      }
-    });
-  }
+if (downloadBtn) {
+  downloadBtn.addEventListener('click', (e) => {
+    e.preventDefault(); // отменяет стандартное действие (переход по пустой ссылке)
+    window.open('https://psv4.userapi.com/s/v1/d/9R66-nKEIZz-SU_aOvMWsXg673WPer3W9eYKtOj_1EthGvCuz4GNGm7WsP-Et9LIhYr9sw2ZlXptVYvNcJ2Tot_iD2YRFtKyNmuoPHcyI678j3NEp19f5w/Godbound_russkaya_besplatnaya_versia_2019_11_16.pdf', '_blank');
+  });
+}
+
 </script>
 
 </body>

@@ -11,22 +11,41 @@
 </head>
 <body>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('.rule-section');
+    sections.forEach((section, index) => {
+      const header = section.querySelector('.section-header');
+      const content = section.querySelector('.section-content');
+      if (!header || !content) return;
+      if (index === 0) {
+        content.classList.add('open');
+        header.classList.add('open');
+      } else {
+        content.classList.remove('open');
+        header.classList.remove('open');
+      }
+      header.addEventListener('click', () => {
+        content.classList.toggle('open');
+        header.classList.toggle('open');
+      });
+    });
+  });
+</script>
+  
 <div class="nav-links">
   <a href="index.html"><i class="fas fa-home"></i> Главная</a>
   <a href="rules.html"><i class="fas fa-dice-d20"></i> Правила</a>
   <a href="words.html" class="active"><i class="fas fa-meteor"></i> Слова Творения</a>
   <a href="lore.html"><i class="fas fa-scroll"></i> Лор</a>
-  <a href="bestiary.html"><i class="fas fa-dragon"></i> Бестиарий существ</a>
+  <a href="bestiary.html"><i class="fas fa-dragon"></i> Бестиарий</a>
   <a href="tools.html"><i class="fas fa-tools"></i> Инструменты мастера</a>
   <a href="download.html"><i class="fas fa-download"></i> Скачать</a>
 </div>
 
 <div class="book">
   <div class="page">
-    <div class="corner corner-tl"></div>
-    <div class="corner corner-tr"></div>
-    <div class="corner corner-bl"></div>
-    <div class="corner corner-br"></div>
+    
     <div style="text-align: center;">
       <div class="page-title">
         <h1>✨ Слова Творения ✨</h1>
